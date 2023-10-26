@@ -27,23 +27,29 @@ def wikipedia_game_solver(start_page, target_page):
     path = []
 
     queue.put(start_page.title)
+   
 
     while not queue.empty():
         current_page_title = queue.get()
+       
         if current_page_title == target_page.title:
+            print("Target found")
             break
+
+
+        visited.append(current_page_title)
         current_page = wiki_wiki.page(current_page_title)
         current_links = fetch_links(current_page)
-        visited.append(current_page_title)
-
+  
         for thing in current_links:
             if thing not in visited:
                 queue.put(thing)
+                visited.append(thing)
                 parent[thing] = current_page_title
 
     child = target_page.title
 
-    while child != start_page_title:
+    while child != start_page.title:
         path.append(child)
         child = parent[child]
     path.append(start_page.title)
@@ -55,8 +61,8 @@ def wikipedia_game_solver(start_page, target_page):
     return path
 
 # Example usage:
-start_page = wiki_wiki.page('Charizard')
-target_page = wiki_wiki.page('Re:Zero')
+start_page = wiki_wiki.page('Nina Tandon')
+target_page = wiki_wiki.page('Romance language')
 path = wikipedia_game_solver(start_page, target_page)
 print("Shortest path:", path)
 
